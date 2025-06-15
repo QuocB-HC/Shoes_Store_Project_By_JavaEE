@@ -10,20 +10,23 @@
 <html>
     <head>
     <a href="../../../../Basic/web/WEB-INF/jsp/index.jsp"></a>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Layout Demo</title>
-    </head>
-    <body>
-        <!--Header-->
-        <h1>Layout Demo</h1>
-        <a href="<c:url value="/" />" >Home</a> | 
-        <a href="<c:url value="/product/page1" />" >Page 1</a> | 
-        <a href="<c:url value="/product/page2" />" >Page 2</a>
-        <hr/>
-        <!--View-->
-        <jsp:include page="/WEB-INF/views/${folder}/${view}.jsp" />
-        <!--Footer-->
-        <hr/>
-        &copy; 2025 HSU
-    </body>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="StyleSheet" href="<c:url value="/css/layout.css" />" />
+    <title>Layout Demo</title>
+</head>
+<body>
+    <!--Header-->
+    <h1 class="title">Layout Demo</h1>
+    <a href="<c:url value="/" />" >Home</a> | 
+    <a href="<c:url value="/product/page1" />" >Page 1</a> | 
+    <a href="<c:url value="/product/page2" />" >Page 2</a>
+    
+    <a href="<c:url value="/logout" />">Log Out</a>
+    <hr/>
+    <!--View-->
+    <jsp:include page="/WEB-INF/views/${folder}/${view}.jsp" />
+    <!--Footer-->
+    <hr/>
+    &copy; 2025 HSU
+</body>
 </html>

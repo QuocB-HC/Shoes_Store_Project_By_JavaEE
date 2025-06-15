@@ -38,7 +38,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Product.findAll", query = "SELECT p FROM Product p")
     , @NamedQuery(name = "Product.findById", query = "SELECT p FROM Product p WHERE p.id = :id")
     , @NamedQuery(name = "Product.findByName", query = "SELECT p FROM Product p WHERE p.name = :name")
-    , @NamedQuery(name = "Product.findByStockQuantity", query = "SELECT p FROM Product p WHERE p.stockQuantity = :stockQuantity")
     , @NamedQuery(name = "Product.findByImages", query = "SELECT p FROM Product p WHERE p.images = :images")
     , @NamedQuery(name = "Product.findByIsSecondHand", query = "SELECT p FROM Product p WHERE p.isSecondHand = :isSecondHand")
     , @NamedQuery(name = "Product.findByForGender", query = "SELECT p FROM Product p WHERE p.forGender = :forGender")
@@ -58,10 +57,6 @@ public class Product implements Serializable {
     @Size(min = 1, max = 200)
     @Column(name = "name")
     private String name;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "stock_quantity")
-    private int stockQuantity;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 2147483647)
@@ -96,9 +91,6 @@ public class Product implements Serializable {
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     @ManyToOne
     private Category categoryId;
-    @JoinColumn(name = "purpose_id", referencedColumnName = "id")
-    @ManyToOne
-    private Purpose purposeId;
     @OneToMany(mappedBy = "productId")
     private Collection<Review> reviewCollection;
 
@@ -109,10 +101,9 @@ public class Product implements Serializable {
         this.id = id;
     }
 
-    public Product(Integer id, String name, int stockQuantity, String images, boolean isSecondHand, String forGender, int price) {
+    public Product(Integer id, String name, String images, boolean isSecondHand, String forGender, int price) {
         this.id = id;
         this.name = name;
-        this.stockQuantity = stockQuantity;
         this.images = images;
         this.isSecondHand = isSecondHand;
         this.forGender = forGender;
@@ -133,14 +124,6 @@ public class Product implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public int getStockQuantity() {
-        return stockQuantity;
-    }
-
-    public void setStockQuantity(int stockQuantity) {
-        this.stockQuantity = stockQuantity;
     }
 
     public String getImages() {
@@ -223,14 +206,6 @@ public class Product implements Serializable {
 
     public void setCategoryId(Category categoryId) {
         this.categoryId = categoryId;
-    }
-
-    public Purpose getPurposeId() {
-        return purposeId;
-    }
-
-    public void setPurposeId(Purpose purposeId) {
-        this.purposeId = purposeId;
     }
 
     @XmlTransient

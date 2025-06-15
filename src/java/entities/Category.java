@@ -33,8 +33,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Category.findAll", query = "SELECT c FROM Category c")
     , @NamedQuery(name = "Category.findById", query = "SELECT c FROM Category c WHERE c.id = :id")
     , @NamedQuery(name = "Category.findByName", query = "SELECT c FROM Category c WHERE c.name = :name")
-    , @NamedQuery(name = "Category.findByDescription", query = "SELECT c FROM Category c WHERE c.description = :description")
-    , @NamedQuery(name = "Category.findByImages", query = "SELECT c FROM Category c WHERE c.images = :images")})
+    , @NamedQuery(name = "Category.findByDescription", query = "SELECT c FROM Category c WHERE c.description = :description")})
 public class Category implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -51,11 +50,6 @@ public class Category implements Serializable {
     @Size(max = 2147483647)
     @Column(name = "description")
     private String description;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 2147483647)
-    @Column(name = "images")
-    private String images;
     @OneToMany(mappedBy = "categoryId")
     private Collection<Product> productCollection;
 
@@ -66,10 +60,9 @@ public class Category implements Serializable {
         this.id = id;
     }
 
-    public Category(Integer id, String name, String images) {
+    public Category(Integer id, String name) {
         this.id = id;
         this.name = name;
-        this.images = images;
     }
 
     public Integer getId() {
@@ -94,14 +87,6 @@ public class Category implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getImages() {
-        return images;
-    }
-
-    public void setImages(String images) {
-        this.images = images;
     }
 
     @XmlTransient

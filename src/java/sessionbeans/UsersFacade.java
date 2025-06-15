@@ -8,6 +8,7 @@ package sessionbeans;
 import entities.Users;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
 /**
@@ -25,8 +26,18 @@ public class UsersFacade extends AbstractFacade<Users> {
         return em;
     }
 
+    public Users findByEmail(String email) {
+        try {
+            return em.createQuery("SELECT user FROM Users user WHERE user.email = :email", Users.class)
+                    .setParameter("email", email)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
     public UsersFacade() {
         super(Users.class);
     }
-    
+
 }
