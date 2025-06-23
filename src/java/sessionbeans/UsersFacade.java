@@ -6,6 +6,7 @@
 package sessionbeans;
 
 import entities.Users;
+import java.util.Date;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -36,8 +37,23 @@ public class UsersFacade extends AbstractFacade<Users> {
         }
     }
 
+    public void updateBasicInfo(Integer userId, String fullName, String phoneNumber, String gender, Date dateOfBirth) {
+        em.createQuery("UPDATE Users u SET u.fullName = :fullName, u.phoneNumber = :phoneNumber, "
+                + "u.gender = :gender, u.dateOfBirth = :dateOfBirth WHERE u.id = :id")
+                .setParameter("fullName", fullName)
+                .setParameter("phoneNumber", phoneNumber)
+                .setParameter("gender", gender)
+                .setParameter("dateOfBirth", dateOfBirth)
+                .setParameter("id", userId)
+                .executeUpdate();
+    }
+
     public UsersFacade() {
         super(Users.class);
+    }
+
+    public void updateBasicInfo(Integer id, Date DateOfBirth, String phoneNumber, String gender, Date dateOfBirth) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
