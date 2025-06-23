@@ -6,6 +6,7 @@
 package sessionbeans;
 
 import entities.ProductVariant;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -25,8 +26,15 @@ public class ProductVariantFacade extends AbstractFacade<ProductVariant> {
         return em;
     }
 
+    public List<ProductVariant> getProductVariantByProductId(int id) {
+        return em.createQuery(
+                "SELECT productVariant FROM ProductVariant productVariant WHERE productVariant.productId.id = :productId", ProductVariant.class)
+                .setParameter("productId", id)
+                .getResultList();
+    }
+
     public ProductVariantFacade() {
         super(ProductVariant.class);
     }
-    
+
 }

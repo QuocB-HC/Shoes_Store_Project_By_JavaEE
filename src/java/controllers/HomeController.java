@@ -8,7 +8,6 @@ package controllers;
 import entities.Product;
 import java.util.List;
 import javax.ejb.EJB;
-import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -25,15 +24,11 @@ public class HomeController {
     private ProductFacade pf;
 
     @RequestMapping({"", "/home"})
-    public ModelAndView index(HttpSession session) {
-        if (session.getAttribute("currentUser") == null) {
-            return new ModelAndView("authentication/login");
-        }
-
+    public ModelAndView index() {
         modelAV.addObject("view", "index");
 
-        List<Product> list = pf.findAll();
-        modelAV.addObject("list", list);
+        List<Product> productList = pf.findAll();
+        modelAV.addObject("productList", productList);
 
         return modelAV;
     }

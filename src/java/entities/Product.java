@@ -8,6 +8,8 @@ package entities;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -241,5 +243,31 @@ public class Product implements Serializable {
     public String toString() {
         return "entities.Product[ id=" + id + " ]";
     }
-    
+
+    public int getTotalStock() {
+        int total = 0;
+        if (this.productVariantCollection != null) {
+            for (ProductVariant pv : productVariantCollection) {
+                total += pv.getStockQuantity();
+            }
+        }
+        return total;
+    }
+
+    public Set<String> getAllSize() {
+        Set<String> sizes = new HashSet<>();
+        if (this.productVariantCollection != null) {
+            for (ProductVariant pv : productVariantCollection) {
+                sizes.add(pv.getSize());
+            }
+        }
+        return sizes;
+    }
+
+    public String getForGenderCapitalized() {
+        if (forGender == null || forGender.isEmpty()) {
+            return "";
+        }
+        return forGender.substring(0, 1).toUpperCase() + forGender.substring(1);
+    }
 }
