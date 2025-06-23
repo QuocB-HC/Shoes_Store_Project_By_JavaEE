@@ -4,18 +4,25 @@
 
 <style>
     .main-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         padding: 30px;
-        max-width: 900px;
-        margin: 0 auto;
-        background-color: #fff;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        text-align: center;
     }
 
     h1 {
         text-align: center;
         margin-bottom: 30px;
         color: #2c3e50;
+    }
+
+    .create-wrapper {
+        width: 100%;
+        max-width: 1200px;
+        display: flex;
+        justify-content: flex-start;
+        margin-bottom: 15px;
     }
 
     a.create-link {
@@ -68,7 +75,10 @@
 <main class="main-container">
     <h1>Product Variant List</h1>
 
-    <a href="<c:url value='/admin/product_variant/create?productId=${productId}' />" class="create-link">Create</a>
+    <div class="create-wrapper">
+        <a href="<c:url value="/admin/product/create" />" class="create-link">Create</a>
+    </div>
+
     <table border="1" cellspacing="0" cellpadding="4">
         <tr>
             <th>No.</th>

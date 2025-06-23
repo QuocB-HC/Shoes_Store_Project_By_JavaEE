@@ -7,27 +7,85 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
+        padding: 30px;
+        text-align: center;
     }
-    
-    .header {
-        width: 80%;
+
+    h1 {
+        color: #2c3e50;
+        margin-bottom: 20px;
+    }
+
+    .create-wrapper {
+        width: 100%;
+        max-width: 1200px;
         display: flex;
-        justify-content: space-between;
-        align-items: center
+        justify-content: flex-start;
+        margin-bottom: 15px;
+    }
+
+    a.create-link {
+        display: inline-block;
+        margin-bottom: 20px;
+        padding: 10px 20px;
+        background-color: #3498db;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 6px;
+        transition: background-color 0.2s;
+    }
+
+    a.create-link:hover {
+        background-color: #2980b9;
+    }
+
+    table {
+        width: 100%;
+        max-width: 1200px;
+        border-collapse: collapse;
+        background-color: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    th, td {
+        padding: 10px 15px;
+        text-align: center;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #3498db;
+        color: white;
+    }
+
+    tr:hover {
+        background-color: #f1f1f1;
     }
 
     .product-image {
-        width: 100px;
-        height: 100px;
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 6px;
+    }
+
+    a {
+        color: #2980b9;
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
     }
 </style>
 
 <main class="main-container">
-    <div class="header">
-        <p></p>
-        <h1>Product List</h1>
-        <a href="<c:url value="/admin/product/create" />">Create</a>
+    <h1>Product List</h1>
+
+    <div class="create-wrapper">
+        <a href="<c:url value="/admin/product/create" />" class="create-link">Create</a>
     </div>
 
     <table border="1" cellspacing="0" cellpadding="4">
