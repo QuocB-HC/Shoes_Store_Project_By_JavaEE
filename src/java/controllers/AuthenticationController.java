@@ -5,7 +5,7 @@
  */
 package controllers;
 
-import entities.Users;
+import entities.User;
 import java.sql.Date;
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServlet;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import sessionbeans.UsersFacade;
+import sessionbeans.UserFacade;
 
 /**
  *
@@ -25,8 +25,8 @@ import sessionbeans.UsersFacade;
 @Controller
 public class AuthenticationController {
 
-    @EJB(mappedName = "java:global/Shoes-Shopping-Web/UsersFacade")
-    private UsersFacade usersFacade;
+    @EJB(mappedName = "java:global/Shoes-Shopping-Web/UserFacade")
+    private UserFacade userFacade;
 
     @RequestMapping("/login")
     public ModelAndView login() {
@@ -43,7 +43,7 @@ public class AuthenticationController {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
-        Users user = usersFacade.findByEmail(email);
+        User user = userFacade.findByEmail(email);
 
         if (user != null && BCrypt.checkpw(password, user.getHashPassword())) {
             session.setAttribute("currentUser", user);
@@ -57,7 +57,7 @@ public class AuthenticationController {
 
     @RequestMapping(value = "/doRegister", method = RequestMethod.POST)
     public ModelAndView doRegister(HttpServletRequest request) {
-        Users user = new Users();
+        User user = new User();
         user.setFullName(request.getParameter("fullName"));
         user.setEmail(request.getParameter("email"));
         user.setPhoneNumber(request.getParameter("phone"));
@@ -71,13 +71,13 @@ public class AuthenticationController {
         user.setCreatedAt(new Date(System.currentTimeMillis()));
         user.setUpdatedAt(new Date(System.currentTimeMillis()));
 
-        usersFacade.create(user);
+        userFacade.create(user);
         return new ModelAndView("redirect:/login");
     }
 
     @RequestMapping("/logout")
     public ModelAndView logout(HttpSession session) {
         session.invalidate();
-        return new ModelAndView("redirect:/login");
+        return new ModelAndView("redirect:/home");
     }
 }

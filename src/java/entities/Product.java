@@ -3,6 +3,8 @@ package entities;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -86,8 +88,7 @@ public class Product implements Serializable {
     @OneToMany(mappedBy = "productId")
     private Collection<Review> reviewCollection;
 
-    public Product() {
-    }
+    public Product() {}
 
     public Product(Integer id) {
         this.id = id;
@@ -101,6 +102,8 @@ public class Product implements Serializable {
         this.forGender = forGender;
         this.price = price;
     }
+
+    // Getters và setters...
 
     public Integer getId() {
         return id;
@@ -200,7 +203,6 @@ public class Product implements Serializable {
         this.categoryId = categoryId;
     }
 
-    // ✅ Thêm getter/setter để dùng ${product.brand.name} và ${product.category.name}
     public Brand getBrand() {
         return brandId;
     }
@@ -228,9 +230,7 @@ public class Product implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
+        return (id != null ? id.hashCode() : 0);
     }
 
     @Override
@@ -243,5 +243,32 @@ public class Product implements Serializable {
     @Override
     public String toString() {
         return "entities.Product[ id=" + id + " ]";
+    }
+
+    public int getTotalStock() {
+        int total = 0;
+        if (this.productVariantCollection != null) {
+            for (ProductVariant pv : productVariantCollection) {
+                total += pv.getStockQuantity();
+            }
+        }
+        return total;
+    }
+
+    public Set<String> getAllSize() {
+        Set<String> sizes = new HashSet<>();
+        if (this.productVariantCollection != null) {
+            for (ProductVariant pv : productVariantCollection) {
+                sizes.add(pv.getSize());
+            }
+        }
+        return sizes;
+    }
+
+    public String getForGenderCapitalized() {
+        if (forGender == null || forGender.isEmpty()) {
+            return "";
+        }
+        return forGender.substring(0, 1).toUpperCase() + forGender.substring(1);
     }
 }
