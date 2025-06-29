@@ -1,59 +1,42 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <!--<link rel="StyleSheet" href="<c:url value="/css/home.css" />" />-->
 
 <style>
-    .main-container {
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f5f5f5;
         margin: 0;
         padding: 0;
-        display: flex;
-        gap: 5%;
-
-    }
-    .filter-container {
-        width: 15%
     }
 
-
-    .product-list-container {
-        width: 80%;
-        display: flex;
-        flex-direction: row;
-        gap: 1.5%;
-        flex-wrap: wrap;
-    }
-
-    .card-container {
-        width: 30%;
-        height: auto;
-    }
-
-    .product-image {
+    .content {
         width: 100%;
-        height: 400px;
-        cursor: pointer;
+        padding-bottom: 30px;
     }
 
-    .product-name {
-        font-weight: bold;
-        cursor: pointer;
+    .banner {
+        width: 100%;
+    }
+
+    .brand-section {
+        margin-top: 30px;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
     }
 </style>
 
-<!--<h2>Home Page</h2>-->
-<main class="main-container">
-    <div class="filter-container">
-
+<div class="content">
+    <div class="banner">
+        <img src="<c:url value='/imgs/banner.webp' /> " alt="Banner khuyến mãi" width=100% height="500"/>
     </div>
 
-    <div class="product-list-container">
-        <c:forEach var="product" items="${productList}">
-            <div class="card-container">
-                <img src="<c:url value="/imgs/product-images/${product.images}" />" class="product-image" />
-                <p class="product-name">${product.name}</p>
-                <p class="product-price"><fmt:formatNumber value="${product.price}" /><sup>đ</sup></p>
-            </div>
+    <div class="brand-section">
+        <c:forEach var="brand" items="${brandList}" >
+            <img src="<c:url value="/imgs/brand-logo/${brand.logo}" />" alt="${brand.name}" width=235 height=125 />
         </c:forEach>
     </div>
-</main>
+</div>

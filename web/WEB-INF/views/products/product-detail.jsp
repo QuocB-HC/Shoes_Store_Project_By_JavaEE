@@ -115,14 +115,14 @@
 
     <!-- Hình ảnh sản phẩm -->
     <div class="image-gallery">
-        <img id="mainImage" src="${pageContext.request.contextPath}/images/product-images/${product.images}" class="main-image" alt="${product.name}">
+        <img id="mainImage" src="<c:url value="/imgs/product-images/${product.images}" />" class="main-image" alt="${product.name}">
         
         <!-- Ảnh phụ (nếu có) -->
-        <div class="thumbnail-list">
+<!--        <div class="thumbnail-list">
             <img src="${pageContext.request.contextPath}/images/product-images/${product.images}" onclick="changeMainImage(this.src)" />
             <img src="${pageContext.request.contextPath}/images/product-images/${product.images}" onclick="changeMainImage(this.src)" />
             <img src="${pageContext.request.contextPath}/images/product-images/${product.images}" onclick="changeMainImage(this.src)" />
-        </div>
+        </div>-->
     </div>
 
     <!-- Thông tin sản phẩm -->

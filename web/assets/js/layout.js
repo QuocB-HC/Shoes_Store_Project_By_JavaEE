@@ -1,9 +1,5 @@
-$('#btn').click(function () {
-    alert('clicked button !!!');
-});
-
 // Toggle dropdown
-$('.user-avatar').click(function (e) {
+$('.user-info').click(function (e) {
     e.stopPropagation();
     $('.user-menu').slideToggle(200);
 });
@@ -13,4 +9,16 @@ $(document).click(function (e) {
     if (!$(e.target).closest('.user').length) {
         $('.user-menu').slideUp(200);
     }
+});
+
+$(document).ready(function () {
+    $('.menu-item').click(function () {
+        $(this).find('a')[0].click();
+    });
+});
+
+$(document).ready(function () {
+    $('.login-btn').click(function () {
+        $(this).find('a')[0].click();
+    });
 });
