@@ -58,7 +58,7 @@
 
     <form action="<c:url value='/admin/product_variant/create' />" method="post" class="form-container">
         <input type="hidden" name="productId" value="${productId}" />
-        
+
         <label for="size">Size</label>
         <input type="text" id="size" name="size" required />
 

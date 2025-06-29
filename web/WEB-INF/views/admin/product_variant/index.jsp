@@ -76,7 +76,7 @@
     <h1>Product Variant List</h1>
 
     <div class="create-wrapper">
-        <a href="<c:url value="/admin/product/create" />" class="create-link">Create</a>
+        <a href="<c:url value="/admin/product_variant/create?productId=${param.productId}" />" class="create-link">Create</a>
     </div>
 
     <table border="1" cellspacing="0" cellpadding="4">
@@ -96,8 +96,8 @@
                 <td>${productVariant.color}</td>
                 <td>${productVariant.stockQuantity}</td>
                 <td class="action-links">
-                    <a href="<c:url value="/admin/product/edit?id=${product.id}" />">Edit</a> | 
-                    <a href="<c:url value="/admin/product/delete?id=${product.id}" />">Delete</a> 
+                    <a href="<c:url value="/admin/product_variant/edit?id=${productVariant.id}&productId=${param.productId}" />">Edit</a> | 
+                    <a href="<c:url value="/admin/product_variant/delete?id=${productVariant.id}&productId=${param.productId}" />">Delete</a> 
                 </td>
             </tr>
         </c:forEach>

@@ -1,27 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this tproductlate file, choose Tools | Tproductlates
- * and open the tproductlate in the editor.
- */
 package controllers;
 
+import entities.Product;
 import entities.ProductVariant;
-import java.io.File;
-import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
-import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import sessionbeans.ProductFacade;
 import sessionbeans.ProductVariantFacade;
 
 /**
- *
- * @author ASUS
+ * Controller quản lý ProductVariant
  */
 @Controller
 public class AdminProductVariantController {
@@ -31,83 +21,175 @@ public class AdminProductVariantController {
     @EJB(mappedName = "java:global/Shoes-Shopping-Web/ProductVariantFacade")
     private ProductVariantFacade productVariantFacade;
 
+    @EJB(mappedName = "java:global/Shoes-Shopping-Web/ProductFacade")
+    private ProductFacade productFacade;
+
+    // Trang danh sách các biến thể của sản phẩm
     @RequestMapping("/admin/product_variant")
     public ModelAndView index(@RequestParam("productId") int productId) {
         modelAV.addObject("view", "product_variant/index");
 
         List<ProductVariant> productVariantList = productVariantFacade.getProductVariantByProductId(productId);
         modelAV.addObject("productVariantList", productVariantList);
+        modelAV.addObject("productId", productId);
 
         return modelAV;
     }
 
+    // Trang tạo mới ProductVariant
     @RequestMapping("/admin/product_variant/create")
-    public ModelAndView create() {
+    public ModelAndView create(@RequestParam("productId") int productId) {
+        ModelAndView modelAV = new ModelAndView("layout", "folder", "admin");
+
         modelAV.addObject("view", "product_variant/create");
+        modelAV.addObject("productId", productId);
 
         return modelAV;
     }
 
+    // Xử lý tạo mới ProductVariant - FIXED METHOD
     @RequestMapping(value = "/admin/product_variant/create", method = RequestMethod.POST)
-    public ModelAndView create(ProductVariant productVariant) {
-        productVariantFacade.create(productVariant);
+    public ModelAndView create(@RequestParam("size") String size,
+            @RequestParam("color") String color,
+            @RequestParam("stockQuantity") int stockQuantity,
+            @RequestParam("productId") int productId) {
+        // In ra thông tin đã nhập
+        System.out.println("===== FORM SUBMISSION =====");
+        System.out.println("Size: " + size);
+        System.out.println("Color: " + color);
+        System.out.println("Stock Quantity: " + stockQuantity);
+        System.out.println("Product ID: " + productId);
+        System.out.println("===========================");
 
-        return new ModelAndView("redirect:/admin/product_variant?productId=" + productVariant.getProductId());
+        try {
+            // Fetch the Product object using the productId
+            Product product = productFacade.find(productId);
+            if (product == null) {
+                throw new RuntimeException("Product not found with ID: " + productId);
+            }
+
+            // Manually create ProductVariant object
+            ProductVariant productVariant = new ProductVariant();
+            productVariant.setSize(size);
+            productVariant.setColor(color);
+            productVariant.setStockQuantity(stockQuantity);
+            productVariant.setProductId(product);
+
+            productVariantFacade.create(productVariant);
+
+            return new ModelAndView("redirect:/admin/product_variant?productId=" + productId);
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            ModelAndView mav = new ModelAndView("layout", "folder", "admin");
+            mav.addObject("view", "product_variant/create");
+            mav.addObject("productId", productId);
+            mav.addObject("error", "Lỗi tạo product variant: " + e.getMessage());
+
+            return mav;
+        }
     }
-//
-//    @RequestMapping("/admin/product/edit")
-//    public ModelAndView edit(int id) {
-//        Product product = productFacade.find(id);
-//
-//        modelAV.addObject("view", "/product/edit");
-//        modelAV.addObject("product", product);
-//
-//        return modelAV;
-//    }
-//
-//    @RequestMapping(value = "/admin/product/edit", method = RequestMethod.POST)
-//    public ModelAndView edit(@RequestParam("newImageFile") MultipartFile imageFile, Product product, HttpServletRequest request) {
-//        try {
-//            if (!imageFile.isEmpty()) {
-//                String originalFilename = imageFile.getOriginalFilename();
-//                String uploadPath = request.getServletContext().getRealPath("/images/product-images/");
-//                File uploadDir = new File(uploadPath);
-//                if (!uploadDir.exists()) {
-//                    uploadDir.mkdirs();
-//                }
-//                File savedFile = new File(uploadDir, originalFilename);
-//                imageFile.transferTo(savedFile);
-//                product.setImages(originalFilename);
-//
-//                product.setUpdatedAt(new Date());
-//                productFacade.edit(product);
-//            } else {
-//                productFacade.updateProductWithoutImage(product);
-//            }
-//
-//            return new ModelAndView("redirect:/admin/product");
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return new ModelAndView("error");
-//        }
-//    }
-//
-//    @RequestMapping("/admin/product/delete")
-//    public ModelAndView delete(int id) {
-//        ModelAndView modeAV = new ModelAndView("/admin/product/delete");
-//
-//        modeAV.addObject("id", id);
-//
-//        return modeAV;
-//    }
-//
-//    @RequestMapping(value = "/admin/product/delete", method = RequestMethod.POST)
-//    public ModelAndView delete(int id, String op) {
-//        if (op.equals("yes")) {
-//            Product product = productFacade.find(id);
-//
-//            productFacade.remove(product);
-//        }
-//        return new ModelAndView("redirect:/admin/product");
-//    }
+
+    // Trang chỉnh sửa ProductVariant
+    @RequestMapping("/admin/product_variant/edit")
+    public ModelAndView edit(@RequestParam("id") int id, @RequestParam("productId") int productId) {
+        ProductVariant productVariant = productVariantFacade.find(id);
+        Product product = productFacade.find(productId);
+
+        modelAV.addObject("view", "product_variant/edit");
+
+        modelAV.addObject("productVariant", productVariant);
+        modelAV.addObject("product", product);
+        modelAV.addObject("productId", productId);
+
+        return modelAV;
+    }
+
+    // Xử lý chỉnh sửa ProductVariant
+    @RequestMapping(value = "/admin/product_variant/edit", method = RequestMethod.POST)
+    public ModelAndView edit(@RequestParam("id") int id,
+            @RequestParam("size") String size,
+            @RequestParam("color") String color,
+            @RequestParam("stockQuantity") int stockQuantity,
+            @RequestParam("productId") int productId) {
+        System.out.println("===== EDIT SUBMISSION =====");
+        System.out.println("ID: " + id);
+        System.out.println("Size: " + size);
+        System.out.println("Color: " + color);
+        System.out.println("Stock Quantity: " + stockQuantity);
+        System.out.println("Product ID: " + productId);
+        System.out.println("===========================");
+
+        try {
+            // Lấy ProductVariant hiện tại
+            ProductVariant productVariant = productVariantFacade.find(id);
+            if (productVariant == null) {
+                throw new RuntimeException("ProductVariant not found with ID: " + id);
+            }
+
+            // Lấy Product object
+            Product product = productFacade.find(productId);
+            if (product == null) {
+                throw new RuntimeException("Product not found with ID: " + productId);
+            }
+
+            // Cập nhật thông tin
+            productVariant.setSize(size);
+            productVariant.setColor(color);
+            productVariant.setStockQuantity(stockQuantity);
+            productVariant.setProductId(product);
+
+            productVariantFacade.edit(productVariant);
+
+            return new ModelAndView("redirect:/admin/product_variant?productId=" + productId);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            ModelAndView mav = new ModelAndView("layout", "folder", "admin");
+            mav.addObject("view", "product_variant/edit");
+            mav.addObject("productId", productId);
+            mav.addObject("error", "Lỗi cập nhật product variant: " + e.getMessage());
+
+            return mav;
+        }
+    }
+
+    // Trang xác nhận xoá ProductVariant
+    @RequestMapping("/admin/product_variant/delete")
+    public ModelAndView deleteConfirm(@RequestParam("id") int id, @RequestParam("productId") int productId) {
+        ModelAndView mav = new ModelAndView("/admin/product_variant/delete");
+        mav.addObject("id", id);
+        mav.addObject("productId", productId);
+        return mav;
+    }
+
+    // Xử lý xoá ProductVariant
+    @RequestMapping(value = "/admin/product_variant/delete", method = RequestMethod.POST)
+    public ModelAndView delete(@RequestParam("id") int id,
+            @RequestParam("op") String op,
+            @RequestParam("productId") int productId) {
+        System.out.println("===== DELETE OPERATION =====");
+        System.out.println("ID: " + id);
+        System.out.println("Operation: " + op);
+        System.out.println("Product ID: " + productId);
+        System.out.println("=============================");
+
+        try {
+            if ("yes".equals(op)) { // Sử dụng "yes".equals() để tránh NullPointerException
+                ProductVariant productVariant = productVariantFacade.find(id);
+                if (productVariant != null) {
+                    productVariantFacade.remove(productVariant);
+                    System.out.println("ProductVariant deleted successfully");
+                } else {
+                    System.out.println("ProductVariant not found with ID: " + id);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Có thể thêm error handling nếu cần
+        }
+
+        return new ModelAndView("redirect:/admin/product_variant?productId=" + productId);
+    }
 }

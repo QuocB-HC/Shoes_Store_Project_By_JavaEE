@@ -66,11 +66,12 @@
 </style>
 
 <main class="main-container">
-    <h1>Delete Employee</h1>
+    <h1>Delete Product Variant</h1>
 
-    <form action="<c:url value="/admin/product/delete" />" method="post">
-        Are you sure to delete the employee with id = ${id}?
+    <form action="<c:url value="/admin/product_variant/delete" />" method="post">
+        Are you sure to delete the product variant with id = ${id}?
         <input type="hidden" name="id" value="${id}" />
+        <input type="hidden" name="productId" value="${productId}" />
         <button type="submit" name="op" value="yes">Yes</button>
         <button type="submit" name="op" value="no">No</button>
     </form>
