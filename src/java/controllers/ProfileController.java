@@ -56,6 +56,7 @@ public class ProfileController {
     public String updateFullName(HttpSession session, @RequestParam String fullName) {
         User user = (User) session.getAttribute("currentUser");
         user.setFullName(fullName);
+        user.setUpdatedAt(new Date());
         userFacade.edit(user);
         session.setAttribute("currentUser", user);
         return "redirect:/profile";
@@ -65,6 +66,7 @@ public class ProfileController {
     public String updatePhoneNumber(HttpSession session, @RequestParam String phoneNumber) {
         User user = (User) session.getAttribute("currentUser");
         user.setPhoneNumber(phoneNumber);
+        user.setUpdatedAt(new Date());
         userFacade.edit(user);
         session.setAttribute("currentUser", user);
         return "redirect:/profile";
@@ -74,6 +76,7 @@ public class ProfileController {
     public String updateGender(HttpSession session, @RequestParam String gender) {
         User user = (User) session.getAttribute("currentUser");
         user.setGender(gender);
+        user.setUpdatedAt(new Date());
         userFacade.edit(user);
         session.setAttribute("currentUser", user);
         return "redirect:/profile";
@@ -84,6 +87,7 @@ public class ProfileController {
             @RequestParam("dateOfBirth") @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateOfBirth) {
         User user = (User) session.getAttribute("currentUser");
         user.setDateOfBirth(dateOfBirth);
+        user.setUpdatedAt(new Date());
         userFacade.edit(user);
         session.setAttribute("currentUser", user);
         return "redirect:/profile";
@@ -130,6 +134,7 @@ public class ProfileController {
         // Cập nhật mật khẩu mới
         String hashedNewPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt());
         user.setHashPassword(hashedNewPassword);
+        user.setUpdatedAt(new Date());
         userFacade.edit(user);
 
         mv.addObject("success", "Password updated successfully.");

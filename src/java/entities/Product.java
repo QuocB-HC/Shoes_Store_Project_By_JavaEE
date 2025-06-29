@@ -4,7 +4,9 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -15,14 +17,22 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "Product")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Product.findAll", query = "SELECT p FROM Product p"),
-    @NamedQuery(name = "Product.findById", query = "SELECT p FROM Product p WHERE p.id = :id"),
-    @NamedQuery(name = "Product.findByName", query = "SELECT p FROM Product p WHERE p.name = :name"),
-    @NamedQuery(name = "Product.findByImages", query = "SELECT p FROM Product p WHERE p.images = :images"),
-    @NamedQuery(name = "Product.findByIsSecondHand", query = "SELECT p FROM Product p WHERE p.isSecondHand = :isSecondHand"),
-    @NamedQuery(name = "Product.findByForGender", query = "SELECT p FROM Product p WHERE p.forGender = :forGender"),
-    @NamedQuery(name = "Product.findByPrice", query = "SELECT p FROM Product p WHERE p.price = :price"),
-    @NamedQuery(name = "Product.findByCreatedAt", query = "SELECT p FROM Product p WHERE p.createdAt = :createdAt"),
+    @NamedQuery(name = "Product.findAll", query = "SELECT p FROM Product p")
+    ,
+    @NamedQuery(name = "Product.findById", query = "SELECT p FROM Product p WHERE p.id = :id")
+    ,
+    @NamedQuery(name = "Product.findByName", query = "SELECT p FROM Product p WHERE p.name = :name")
+    ,
+    @NamedQuery(name = "Product.findByImages", query = "SELECT p FROM Product p WHERE p.images = :images")
+    ,
+    @NamedQuery(name = "Product.findByIsSecondHand", query = "SELECT p FROM Product p WHERE p.isSecondHand = :isSecondHand")
+    ,
+    @NamedQuery(name = "Product.findByForGender", query = "SELECT p FROM Product p WHERE p.forGender = :forGender")
+    ,
+    @NamedQuery(name = "Product.findByPrice", query = "SELECT p FROM Product p WHERE p.price = :price")
+    ,
+    @NamedQuery(name = "Product.findByCreatedAt", query = "SELECT p FROM Product p WHERE p.createdAt = :createdAt")
+    ,
     @NamedQuery(name = "Product.findByUpdatedAt", query = "SELECT p FROM Product p WHERE p.updatedAt = :updatedAt")
 })
 public class Product implements Serializable {
@@ -74,7 +84,7 @@ public class Product implements Serializable {
     @OneToMany(mappedBy = "productId")
     private Collection<Discount> discountCollection;
 
-    @OneToMany(mappedBy = "productId")
+    @OneToMany(mappedBy = "productId", fetch = FetchType.LAZY)
     private Collection<ProductVariant> productVariantCollection;
 
     @JoinColumn(name = "brand_id", referencedColumnName = "id")
@@ -88,7 +98,8 @@ public class Product implements Serializable {
     @OneToMany(mappedBy = "productId")
     private Collection<Review> reviewCollection;
 
-    public Product() {}
+    public Product() {
+    }
 
     public Product(Integer id) {
         this.id = id;
@@ -104,7 +115,6 @@ public class Product implements Serializable {
     }
 
     // Getters và setters...
-
     public Integer getId() {
         return id;
     }
@@ -235,7 +245,9 @@ public class Product implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        if (!(object instanceof Product)) return false;
+        if (!(object instanceof Product)) {
+            return false;
+        }
         Product other = (Product) object;
         return (this.id != null || other.id == null) && (this.id == null || this.id.equals(other.id));
     }
@@ -245,24 +257,24 @@ public class Product implements Serializable {
         return "entities.Product[ id=" + id + " ]";
     }
 
+    @Transient
+    private int totalStock;
+
+    @Transient
+    private List<String> allSize;
+
     public int getTotalStock() {
-        int total = 0;
-        if (this.productVariantCollection != null) {
-            for (ProductVariant pv : productVariantCollection) {
-                total += pv.getStockQuantity();
-            }
-        }
-        return total;
+        return productVariantCollection == null ? 0
+                : productVariantCollection.stream()
+                        .mapToInt(ProductVariant::getStockQuantity)
+                        .sum();
     }
 
     public Set<String> getAllSize() {
-        Set<String> sizes = new HashSet<>();
-        if (this.productVariantCollection != null) {
-            for (ProductVariant pv : productVariantCollection) {
-                sizes.add(pv.getSize());
-            }
-        }
-        return sizes;
+        return productVariantCollection == null ? new HashSet<>()
+                : productVariantCollection.stream()
+                        .map(ProductVariant::getSize)
+                        .collect(Collectors.toSet());
     }
 
     public String getForGenderCapitalized() {

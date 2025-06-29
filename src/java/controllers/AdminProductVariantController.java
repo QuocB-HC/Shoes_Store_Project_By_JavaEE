@@ -76,6 +76,8 @@ public class AdminProductVariantController {
             productVariant.setProductId(product);
 
             productVariantFacade.create(productVariant);
+            
+            product.getProductVariantCollection().size();
 
             return new ModelAndView("redirect:/admin/product_variant?productId=" + productId);
         } catch (Exception e) {
@@ -140,6 +142,8 @@ public class AdminProductVariantController {
             productVariant.setProductId(product);
 
             productVariantFacade.edit(productVariant);
+            
+            product.getProductVariantCollection().size();
 
             return new ModelAndView("redirect:/admin/product_variant?productId=" + productId);
 
@@ -178,8 +182,13 @@ public class AdminProductVariantController {
         try {
             if ("yes".equals(op)) { // Sử dụng "yes".equals() để tránh NullPointerException
                 ProductVariant productVariant = productVariantFacade.find(id);
+                Product product = productFacade.find(productId);
+                
                 if (productVariant != null) {
                     productVariantFacade.remove(productVariant);
+                    
+                    product.getProductVariantCollection().size();
+                    
                     System.out.println("ProductVariant deleted successfully");
                 } else {
                     System.out.println("ProductVariant not found with ID: " + id);
