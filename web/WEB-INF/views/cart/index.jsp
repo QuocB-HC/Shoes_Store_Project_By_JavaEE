@@ -191,7 +191,7 @@
                     <p><strong>Subtotal:</strong> <fmt:formatNumber value="${total}" type="currency" currencySymbol="" />₫</p>
                     <p>Estimated Delivery & Handling: <strong>Free</strong></p>
                     <p class="summary-total">Total: <fmt:formatNumber value="${total}" type="currency" currencySymbol="" />₫</p>
-                    <button class="checkout-button">Thanh toán</button>
+                    <a class="checkout-button" href="<c:url value="/order" />">Order</a>
                     <a class="back-link" href="${pageContext.request.contextPath}/products/products">← Tiếp tục mua sắm</a>
                 </div>
             </div>

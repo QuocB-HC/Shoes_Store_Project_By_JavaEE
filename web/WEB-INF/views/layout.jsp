@@ -21,6 +21,12 @@
             background-color: #f9f9f9;
         }
 
+        .upper-header {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
         .header-bar {
             display: flex;
             justify-content: space-between;
@@ -36,9 +42,7 @@
             padding: 20px 0;
             font-size: 2rem;
             color: #333;
-            background-color: #ffffff;
             margin: 0;
-            border-bottom: 1px solid #e0e0e0;
         }
 
         .navbar a {
@@ -155,7 +159,14 @@
 </head>
 <body>
     <!--Header-->
-    <h1 class="title"><i class="fas fa-shoe-prints"></i> Shoes Store</h1>
+    <div class="upper-header">
+        <div></div>
+        <h1 class="title"><i class="fas fa-shoe-prints"></i> Shoes Store</h1>   
+        <a href="<c:url value="/cart/view" />">
+            <i class="fas fa-shopping-cart"></i>
+        </a>
+    </div>
+
     <div class="header-bar">
         <div class="navbar">
             <a href="<c:url value="/" />" >Home</a>
@@ -185,11 +196,11 @@
                     <li class="menu-item">
                         <a href="<c:url value="/admin/product" />" >Product Management</a>
                     </li>
-                    
+
                     <li class="menu-item">
                         <a href="<c:url value="/admin/category" />" >Category Management</a>
                     </li>
-                    
+
                     <li class="menu-item">
                         <a href="<c:url value="/admin/brand" />" >Brand Management</a>
                     </li>
