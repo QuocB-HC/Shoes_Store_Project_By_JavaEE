@@ -183,6 +183,21 @@
             .product-info a:hover {
                 text-decoration: underline;
             }
+
+            .sort-bar {
+                margin-bottom: 30px;
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .sort-bar select {
+                padding: 6px 12px;
+                border-radius: 4px;
+                border: 1px solid #ccc;
+                font-size: 14px;
+            }
         </style>
         <script>
             function clearAllFilters() {
@@ -205,6 +220,20 @@
             </form>
 
             <h2 class="title">Sản phẩm nổi bật</h2>
+
+            <!-- ✅ Sort bar -->
+            <div class="sort-bar">
+                <form method="get" action="${pageContext.request.contextPath}/products">
+                    <label for="sort-select">Sort by:</label>
+                    <select id="sort-select" name="sort" onchange="this.form.submit()">
+                        <option value="">-- Select --</option>
+                        <option value="newest" ${param.sort == 'newest' ? 'selected' : ''}>Newest</option>
+                        <option value="oldest" ${param.sort == 'oldest' ? 'selected' : ''}>Oldest</option>
+                        <option value="price-asc" ${param.sort == 'price-asc' ? 'selected' : ''}>Price: Low to High</option>
+                        <option value="price-desc" ${param.sort == 'price-desc' ? 'selected' : ''}>Price: High to Low</option>
+                    </select>
+                </form>
+            </div>
 
             <div class="main-container">
                 <div class="filter-container">
