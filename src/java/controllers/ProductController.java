@@ -92,7 +92,14 @@ public class ProductController {
                     .filter(p -> p.getName() != null && p.getName().toLowerCase().contains(lowerSearch))
                     .collect(Collectors.toList());
         }
+        
+        String sortOption = request.getParameter("sort");
+//        List<Product> products;
 
+        if (sortOption != null && !sortOption.isEmpty()) {
+            list = productFacade.findAllSorted(sortOption);
+        }
+        
         mv.addObject("list", list);
         return mv;
     }

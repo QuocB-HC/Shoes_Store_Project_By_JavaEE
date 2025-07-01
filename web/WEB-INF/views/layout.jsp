@@ -68,6 +68,32 @@
             color: #007bff;
         }
 
+        .navbar-right {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cart-link {
+            display: inline-block;
+            padding: 8px 12px;
+            background-color: #f8f8f8;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+            color: #333;
+            text-decoration: none;
+        }
+
+        .cart-link:hover {
+            background-color: #ddd;
+            color: #000;
+        }
+
+        .cart-link i {
+            font-size: 18px;
+        }
+
         .auth-button a {
             text-decoration: none;
         }
@@ -159,13 +185,7 @@
 </head>
 <body>
     <!--Header-->
-    <div class="upper-header">
-        <div></div>
-        <h1 class="title"><i class="fas fa-shoe-prints"></i> Shoes Store</h1>   
-        <a href="<c:url value="/cart/view" />">
-            <i class="fas fa-shopping-cart"></i>
-        </a>
-    </div>
+    <h1 class="title"><i class="fas fa-shoe-prints"></i> Shoes Store</h1>   
 
     <div class="header-bar">
         <div class="navbar">
@@ -173,59 +193,65 @@
             <a href="<c:url value="/products/products" />" >Product</a>
         </div>
 
-        <div class="auth-button" id="auth-btn">
-            <%
-                User user = (User) session.getAttribute("currentUser");
-                if (user != null) {
-            %>
-            <div class="user">
-                <div class="user-info">
-                    <%= user.getFullName()%>
-                    <img src="<c:url value='/imgs/avatars' />/<%= user.getAvatar()%>" alt="Avatar" class="user-avatar"/>
+        <div class="navbar-right">
+            <a href="<c:url value="/cart/view" />" class="cart-link">
+                <i class="fas fa-shopping-cart"></i>
+            </a>
+
+            <div class="auth-button" id="auth-btn">
+                <%
+                    User user = (User) session.getAttribute("currentUser");
+                    if (user != null) {
+                %>
+                <div class="user">
+                    <div class="user-info">
+                        <%= user.getFullName()%>
+                        <img src="<c:url value='/imgs/avatars' />/<%= user.getAvatar()%>" alt="Avatar" class="user-avatar"/>
+                    </div>
+
+                    <ul class="user-menu">
+                        <li class="menu-item">
+                            <a href="<c:url value="/profile" />" >Information</a>
+                        </li>
+
+                        <%
+                            if ("admin".equals(user.getRole())) {
+                        %>
+
+                        <li class="menu-item">
+                            <a href="<c:url value="/admin/product" />" >Product Management</a>
+                        </li>
+
+                        <li class="menu-item">
+                            <a href="<c:url value="/admin/category" />" >Category Management</a>
+                        </li>
+
+                        <li class="menu-item">
+                            <a href="<c:url value="/admin/brand" />" >Brand Management</a>
+                        </li>
+<!--
+                        <li class="menu-item">
+                            <a >User Management</a>
+                        </li>-->
+
+                        <%
+                            }
+                        %>
+
+                        <li class="menu-item">
+                            <a href="<c:url value='/logout' />">Logout</a>
+                        </li>
+                    </ul>
                 </div>
 
-                <ul class="user-menu">
-                    <li class="menu-item">
-                        <a href="<c:url value="/profile" />" >Information</a>
-                    </li>
-
-                    <%
-                        if ("admin".equals(user.getRole())) {
-                    %>
-
-                    <li class="menu-item">
-                        <a href="<c:url value="/admin/product" />" >Product Management</a>
-                    </li>
-
-                    <li class="menu-item">
-                        <a href="<c:url value="/admin/category" />" >Category Management</a>
-                    </li>
-
-                    <li class="menu-item">
-                        <a href="<c:url value="/admin/brand" />" >Brand Management</a>
-                    </li>
-
-                    <li class="menu-item">
-                        <a >User Management</a>
-                    </li>
-
-                    <%
-                        }
-                    %>
-
-                    <li class="menu-item">
-                        <a href="<c:url value='/logout' />">Logout</a>
-                    </li>
-                </ul>
+                <%
+                } else {
+                %>
+                <button class="login-btn"><a href="<c:url value="/login" />">Login</a></button>
+                <%
+                    }
+                %>
             </div>
-
-            <%
-            } else {
-            %>
-            <button class="login-btn"><a href="<c:url value="/login" />">Login</a></button>
-            <%
-                }
-            %>
         </div>
     </div>
 

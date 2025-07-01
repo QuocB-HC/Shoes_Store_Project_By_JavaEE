@@ -215,15 +215,15 @@
     <body>
         <div class="container">
             <form method="get" action="<c:url value="/products/products" />" class="search-bar">
-                <input type="text" name="search" placeholder="Tìm theo tên sản phẩm" value="${param.search}" />
+                <input type="text" name="search" placeholder="Search by name" value="${param.search}" />
                 <button type="submit">Search</button>
             </form>
 
-            <h2 class="title">Sản phẩm nổi bật</h2>
+            <h2 class="title">Products features</h2>
 
             <!-- ✅ Sort bar -->
             <div class="sort-bar">
-                <form method="get" action="${pageContext.request.contextPath}/products">
+                <form method="get" action="<c:url value='/products/products' />">
                     <label for="sort-select">Sort by:</label>
                     <select id="sort-select" name="sort" onchange="this.form.submit()">
                         <option value="">-- Select --</option>
@@ -306,14 +306,14 @@
                                     </c:choose>
                                 </p>
 
-                                <p class="product-color">1 Colour</p>
+                                <p class="product-color">1 Color</p>
 
                                 <p class="product-price">
                                     <fmt:formatNumber value="${p.price}" type="currency" currencySymbol="" />₫
                                 </p>
 
                                 <a href="${pageContext.request.contextPath}/products/product-detail?id=${p.id}">
-                                    Xem chi tiết
+                                    View detail
                                 </a>
                             </div>
                         </div>
